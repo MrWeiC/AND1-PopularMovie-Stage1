@@ -14,7 +14,7 @@ import static io.weichen.popularmovie.BuildConfig.THEMOVIEDB_API_KEY;
 
 public class NetworkUtils {
     final static String THEMOVIEDB_BASE_URL = "http://api.themoviedb.org/3/movie";
-    public final static String CATEGORY_POPULAR = "Popular";
+    public final static String CATEGORY_POPULAR = "popular";
     public final static String CATEGOry_TOP_RATED ="top_rated";
     final static String PAGE = "page";
     final static String PAGE_NUMBER = "1";

@@ -14,7 +14,7 @@ public class UtilitiesUnitTest {
 
     @Test
     public void CheckUtilitiesBuildUrl_popular(){
-        String targetString = "http://api.themoviedb.org/3/movie/popular?page=1&&api_key="+THEMOVIEDB_API_KEY;
+        String targetString = "http://api.themoviedb.org/3/movie/popular?page=1&api_key="+THEMOVIEDB_API_KEY;
         String buildURL = buildUrl(CATEGORY_POPULAR).toString();
         assertEquals(targetString,buildURL);
     }
