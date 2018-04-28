@@ -3,16 +3,23 @@ package io.weichen.popularmovie;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
+
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import io.weichen.popularmovie.utilities.NetworkUtils;
 
 import static io.weichen.popularmovie.utilities.NetworkUtils.CATEGORY_POPULAR;
+import static io.weichen.popularmovie.utilities.TheMovieDBJSONUtils.getMovieDataFromJSON;
 
 public class MainActivity extends AppCompatActivity {
+
+    private final String TAG = MainActivity.class.getSimpleName();
 
     //TODO: Needs to be deleted
     private TextView test;
@@ -48,9 +55,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String theMovieDBResult) {
-            test.setText(theMovieDBResult);
+            try {
+                ArrayList<MovieData> testMovieArrayList = getMovieDataFromJSON(theMovieDBResult);
+            } catch (JSONException e) {
+                Log.i(TAG, "onPostExecute: ");
+            }
+
         }
     }
-
 
 }
