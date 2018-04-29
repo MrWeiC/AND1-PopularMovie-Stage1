@@ -3,6 +3,9 @@ package io.weichen.popularmovie;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -21,15 +24,23 @@ public class MainActivity extends AppCompatActivity {
 
     private final String TAG = MainActivity.class.getSimpleName();
 
-    //TODO: Needs to be deleted
-    private TextView test;
+    private RecyclerView mMovieGridRecyclerView;
+    private MovieAdapter mMovieAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        test = (TextView)findViewById(R.id.test);
-        //DELETE
+
+        mMovieAdapter = new MovieAdapter();
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+
+        mMovieGridRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_list);
+        mMovieGridRecyclerView.setLayoutManager(layoutManager);
+        mMovieGridRecyclerView.setHasFixedSize(true);
+
+        mMovieGridRecyclerView.setAdapter(mMovieAdapter);
+        //TODO
         makeTheMovieDBQuery();
     }
 
@@ -55,12 +66,15 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String theMovieDBResult) {
-            try {
-                ArrayList<MovieData> testMovieArrayList = getMovieDataFromJSON(theMovieDBResult);
-            } catch (JSONException e) {
-                Log.i(TAG, "onPostExecute: ");
+            if(theMovieDBResult != null) {
+                try {
+                    ArrayList<MovieData> mMovieDataArrayList = getMovieDataFromJSON(theMovieDBResult);
+                    mMovieAdapter.setMovieData(mMovieDataArrayList);
+                } catch (JSONException e) {
+                    Log.i(TAG, "onPostExecute: ");
+                }
             }
-
+            //TODO:
         }
     }
 
