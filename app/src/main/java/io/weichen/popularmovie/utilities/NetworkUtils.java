@@ -20,7 +20,7 @@ public class NetworkUtils {
     final static String PAGE = "page";
     final static String PAGE_NUMBER = "1";
     final static String API_KEY = "api_key";
-    final static String POSTER_SIZE = "w185";
+    final static String POSTER_SIZE = "w500";
 
 
     /**
@@ -73,7 +73,7 @@ public class NetworkUtils {
     public static URL buildPosterPathURL(String path){
         Uri builtUri = Uri.parse(THEMOVIEDB_POSTER_BASE_URL).buildUpon()
                 .appendPath(POSTER_SIZE)
-                .appendPath(path)
+                .appendEncodedPath(path)
                 .build();
         URL url = null;
         try {

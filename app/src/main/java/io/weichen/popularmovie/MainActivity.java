@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
 
     private final String TAG = MainActivity.class.getSimpleName();
     private String defaultSetting = CATEGORY_POPULAR;
+    private final String MOVIE_DATA_TAG = "movie.data";
 
     private RecyclerView mMovieGridRecyclerView;
     private MovieAdapter mMovieAdapter;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         mMovieAdapter = new MovieAdapter(this);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
 
-        mMovieGridRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_list);
+        mMovieGridRecyclerView = findViewById(R.id.rv_movie_list);
         mMovieGridRecyclerView.setLayoutManager(layoutManager);
         mMovieGridRecyclerView.setHasFixedSize(true);
 
@@ -80,9 +81,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
 
     @Override
     public void onGridItemClick(int index) {
-        String movieTitle = mMovieDataArrayList.get(index).getOriginalTitle();
+        MovieData movie = mMovieDataArrayList.get(index);
         Intent movieDetailIntent = new Intent(this, MovieDetailsActivity.class);
-        movieDetailIntent.putExtra(Intent.EXTRA_TEXT, movieTitle);
+        movieDetailIntent.putExtra(MOVIE_DATA_TAG, movie);
         startActivity(movieDetailIntent);
     }
 

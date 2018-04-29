@@ -30,7 +30,7 @@ public class UtilitiesUnitTest {
     public void CheckUtilitiesBuildPosterUrl(){
         String targetString = "http://image.tmdb.org/t/p/w185/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg";
         String path = "nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg";
-        assertEquals(targetString, NetworkUtils.buildPosterPathURL(path));
+        assertEquals(targetString, NetworkUtils.buildPosterPathURL(path).toString());
     }
 
 
