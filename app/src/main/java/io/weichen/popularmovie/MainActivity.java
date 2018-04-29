@@ -2,28 +2,33 @@ package io.weichen.popularmovie;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.weichen.popularmovie.utilities.NetworkUtils;
 
 import static io.weichen.popularmovie.utilities.NetworkUtils.CATEGORY_POPULAR;
+import static io.weichen.popularmovie.utilities.NetworkUtils.CATEGOry_TOP_RATED;
 import static io.weichen.popularmovie.utilities.TheMovieDBJSONUtils.getMovieDataFromJSON;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.GridItemClickListener{
+public class MainActivity extends AppCompatActivity implements MovieAdapter.GridItemClickListener, AdapterView.OnItemSelectedListener {
 
     private final String TAG = MainActivity.class.getSimpleName();
+    private String defaultSetting = CATEGORY_POPULAR;
 
     private RecyclerView mMovieGridRecyclerView;
     private MovieAdapter mMovieAdapter;
@@ -44,11 +49,31 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
 
         mMovieGridRecyclerView.setAdapter(mMovieAdapter);
         //TODO
-        makeTheMovieDBQuery();
+
+        //Now start with the spinner
+        Spinner mSpinner = findViewById(R.id.sp_movie_query_category);
+        // Spinner click listener
+        mSpinner.setOnItemSelectedListener(this);
+
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<>();
+        categories.add("By popular");
+        categories.add("By top rated");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> spinnerDataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        spinnerDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        mSpinner.setAdapter(spinnerDataAdapter);
+
+        makeTheMovieDBQuery(defaultSetting);
     }
 
-    private void makeTheMovieDBQuery(){
-        URL theMovieDBUrl = NetworkUtils.buildUrl(CATEGORY_POPULAR);
+    private void makeTheMovieDBQuery(String category) {
+        URL theMovieDBUrl = NetworkUtils.buildMovieDataQueryUrl(category);
 
         new TheMovieDBQueryTask().execute(theMovieDBUrl);
     }
@@ -61,7 +86,25 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         startActivity(movieDetailIntent);
     }
 
-    public class TheMovieDBQueryTask extends AsyncTask<URL,Void,String>{
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        switch (position){
+            case 0:
+                defaultSetting = CATEGORY_POPULAR;
+                break;
+            case 1:
+                defaultSetting = CATEGOry_TOP_RATED;
+                break;
+        }
+        makeTheMovieDBQuery(defaultSetting);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    public class TheMovieDBQueryTask extends AsyncTask<URL, Void, String> {
 
         @Override
         protected String doInBackground(URL... urls) {
@@ -77,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
 
         @Override
         protected void onPostExecute(String theMovieDBResult) {
-            if(theMovieDBResult != null) {
+            if (theMovieDBResult != null) {
                 try {
                     mMovieDataArrayList = getMovieDataFromJSON(theMovieDBResult);
                     mMovieAdapter.setMovieData(mMovieDataArrayList);

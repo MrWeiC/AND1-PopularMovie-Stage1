@@ -7,9 +7,11 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;
 
+import io.weichen.popularmovie.utilities.NetworkUtils;
+
 import static io.weichen.popularmovie.BuildConfig.THEMOVIEDB_API_KEY;
 import static io.weichen.popularmovie.utilities.NetworkUtils.CATEGORY_POPULAR;
-import static io.weichen.popularmovie.utilities.NetworkUtils.buildUrl;
+import static io.weichen.popularmovie.utilities.NetworkUtils.buildMovieDataQueryUrl;
 import static io.weichen.popularmovie.utilities.TheMovieDBJSONUtils.getMovieDataFromJSON;
 import static junit.framework.Assert.assertEquals;
 
@@ -20,9 +22,17 @@ public class UtilitiesUnitTest {
     @Test
     public void CheckUtilitiesBuildUrl_popular(){
         String targetString = "http://api.themoviedb.org/3/movie/popular?page=1&api_key="+THEMOVIEDB_API_KEY;
-        String buildURL = buildUrl(CATEGORY_POPULAR).toString();
+        String buildURL = buildMovieDataQueryUrl(CATEGORY_POPULAR).toString();
         assertEquals(targetString,buildURL);
     }
+
+    @Test
+    public void CheckUtilitiesBuildPosterUrl(){
+        String targetString = "http://image.tmdb.org/t/p/w185/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg";
+        String path = "nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg";
+        assertEquals(targetString, NetworkUtils.buildPosterPathURL(path));
+    }
+
 
     @Test
     public void getMovieData_size() throws JSONException {

@@ -14,18 +14,20 @@ import static io.weichen.popularmovie.BuildConfig.THEMOVIEDB_API_KEY;
 
 public class NetworkUtils {
     final static String THEMOVIEDB_BASE_URL = "http://api.themoviedb.org/3/movie";
+    final static String THEMOVIEDB_POSTER_BASE_URL = "http://image.tmdb.org/t/p";
     public final static String CATEGORY_POPULAR = "popular";
     public final static String CATEGOry_TOP_RATED ="top_rated";
     final static String PAGE = "page";
     final static String PAGE_NUMBER = "1";
     final static String API_KEY = "api_key";
+    final static String POSTER_SIZE = "w185";
 
 
     /**
      * Builds the URL used to query The Movie DB.
      *
      */
-    public static URL buildUrl(@Nullable String category) {
+    public static URL buildMovieDataQueryUrl(@Nullable String category) {
         Uri builtUri = Uri.parse(THEMOVIEDB_BASE_URL).buildUpon()
                 .appendPath(category)
                 .appendQueryParameter(PAGE, PAGE_NUMBER)
@@ -66,5 +68,20 @@ public class NetworkUtils {
         } finally {
             urlConnection.disconnect();
         }
+    }
+
+    public static URL buildPosterPathURL(String path){
+        Uri builtUri = Uri.parse(THEMOVIEDB_POSTER_BASE_URL).buildUpon()
+                .appendPath(POSTER_SIZE)
+                .appendPath(path)
+                .build();
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
     }
 }
