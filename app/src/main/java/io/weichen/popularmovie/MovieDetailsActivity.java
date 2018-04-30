@@ -29,7 +29,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             //This part of UI will get major update in the stage 2
             movieTitleTextView.setText(mMovieData.getOriginalTitle());
             movieRatingTextView.setText("Rating:" + mMovieData.getUserRating());
-            movieReleaseDateTextView.setText("Release on " + mMovieData.getReleaseDate());
+            movieReleaseDateTextView.setText("Release on: \n " + mMovieData.getReleaseDate());
             movieOverviewTextView.setText("OverView: \n" + mMovieData.getOverview());
 
             String posterURL = NetworkUtils.buildPosterPathURL(mMovieData.getMoviePosterImageThumbnail()).toString();
