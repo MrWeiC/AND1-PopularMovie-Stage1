@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PopularMovie</string>
+    <string name="offline_error_message">This device is currently offline. Please restart the app and tries later.</string>
 </resources>

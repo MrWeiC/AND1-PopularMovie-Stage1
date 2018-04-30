@@ -10,9 +10,7 @@
         android:id="@+id/sp_movie_query_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
-
-    </Spinner>
+        android:padding="8dp"></Spinner>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_movie_list"
@@ -24,4 +22,12 @@
         app:layout_constraintVertical_bias="0.0">
 
     </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/tv_error_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:text="@string/offline_error_message"
+        android:visibility="invisible" />
 </android.support.constraint.ConstraintLayout>

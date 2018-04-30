@@ -1,6 +1,9 @@
 package io.weichen.popularmovie;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.json.JSONException;
 
@@ -33,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
 
     private RecyclerView mMovieGridRecyclerView;
     private MovieAdapter mMovieAdapter;
+    private Spinner mSpinner;
+    private TextView mErrorMessageTextView;
     private ArrayList<MovieData> mMovieDataArrayList;
 
     @Override
@@ -40,37 +46,46 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mMovieDataArrayList = new ArrayList<>();
-
+        //Now start with the spinner
+        mSpinner = findViewById(R.id.sp_movie_query_category);
+        mMovieGridRecyclerView = findViewById(R.id.rv_movie_list);
         mMovieAdapter = new MovieAdapter(this);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        mErrorMessageTextView = findViewById(R.id.tv_error_message);
 
-        mMovieGridRecyclerView = findViewById(R.id.rv_movie_list);
         mMovieGridRecyclerView.setLayoutManager(layoutManager);
         mMovieGridRecyclerView.setHasFixedSize(true);
-
         mMovieGridRecyclerView.setAdapter(mMovieAdapter);
-        //TODO
 
-        //Now start with the spinner
-        Spinner mSpinner = findViewById(R.id.sp_movie_query_category);
-        // Spinner click listener
-        mSpinner.setOnItemSelectedListener(this);
+        // Check if there are network
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        // Spinner Drop down elements
-        List<String> categories = new ArrayList<>();
-        categories.add("By popular");
-        categories.add("By top rated");
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if (isConnected) {
+            // Spinner click listener
+            mSpinner.setOnItemSelectedListener(this);
 
-        // Creating adapter for spinner
-        ArrayAdapter<String> spinnerDataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+            // Spinner Drop down elements
+            List<String> categories = new ArrayList<>();
+            categories.add("By popular");
+            categories.add("By top rated");
 
-        // Drop down layout style - list view with radio button
-        spinnerDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Creating adapter for spinner
+            ArrayAdapter<String> spinnerDataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
 
-        // attaching data adapter to spinner
-        mSpinner.setAdapter(spinnerDataAdapter);
+            // Drop down layout style - list view with radio button
+            spinnerDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        makeTheMovieDBQuery(defaultSetting);
+            // attaching data adapter to spinner
+            mSpinner.setAdapter(spinnerDataAdapter);
+
+            makeTheMovieDBQuery(defaultSetting);
+        } else {
+            showErrorMessage();
+        }
     }
 
     private void makeTheMovieDBQuery(String category) {
@@ -89,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-        switch (position){
+        switch (position) {
             case 0:
                 defaultSetting = CATEGORY_POPULAR;
                 break;
@@ -129,8 +144,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Grid
                     Log.i(TAG, "onPostExecute: ");
                 }
             }
-            //TODO:
         }
     }
 
+    //Handle offline issue
+    private void showErrorMessage() {
+        mMovieGridRecyclerView.setVisibility(View.GONE);
+        mSpinner.setVisibility(View.GONE);
+        mErrorMessageTextView.setVisibility(View.VISIBLE);
+    }
 }

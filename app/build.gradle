@@ -19,6 +19,10 @@ android {
 
     /* This for anyone following along with the repo. Since you will have a different
     *  API key, this code loads up a value from your gradle.properties file.
+    *
+    *  PLEASE PUT your own key
+    *  TheMovieDBAPIKey = "you own key"
+    *  in your gradle.properties(Global Properties)
     */
     buildTypes.each {
         it.buildConfigField 'String', 'THEMOVIEDB_API_KEY', TheMovieDBAPIKey

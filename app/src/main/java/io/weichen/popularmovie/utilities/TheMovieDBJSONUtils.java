@@ -4,7 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import java.util.ArrayList;
 
 import io.weichen.popularmovie.MovieData;
@@ -22,7 +21,7 @@ public class TheMovieDBJSONUtils {
         ArrayList<MovieData> movieDataArraylist = new ArrayList<>();
         JSONObject movieDataJSON = new JSONObject(movieDataJSONStr);
 
-        //TODO: check if there any error in the jason message.
+        //TODO: check if there any error in the jason message, will do in the STAGE2
         JSONArray jsonMovieResultArray = movieDataJSON.getJSONArray(TMDB_RESULTS);
 
         //Get JsonObject in the loop
